@@ -4,6 +4,7 @@ import pandas as pd
 #Change required Path here
 CSV_PATH = "./INSTA.csv"
 
+#Bot init
 scrape_bot = InstaScraper()
 
 #OAuth Authentication
