@@ -19,3 +19,10 @@ scrape_bot.login('<YOUR USERNAME>', '<YOUR PASSWORD>')
 #Get URL
 scrape_bot.get_loc("Enter Search Item Here")
 ```
+
+## Running
+```shell
+git clone https://github.com/someshsingh22/InstaScrape
+cd InstaScrape
+python3 script.py
+```
