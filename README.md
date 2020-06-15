@@ -1,6 +1,11 @@
 # InstaScrape
 This is a scraper for scraping top search results on Instagram
 
+## Requirements
+* python3
+* selenium
+* pandas
+
 ## Usage
 ```python
 from scraper import InstaScraper
