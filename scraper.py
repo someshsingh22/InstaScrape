@@ -9,8 +9,9 @@ LOGIN = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
 
 def sleep_wrap(func, sleep, *args, **kwargs):
     time.sleep(sleep)
-    func(*args, *kwargs)
+    out=func(*args, *kwargs)
     time.sleep(sleep)
+    return out
 
 def login(driver,username,password):
     sleep_wrap(go,3,driver,LOGIN)
@@ -25,7 +26,7 @@ def login(driver,username,password):
 def go(driver, link, sleep=3):
     driver.get(link)
 
-def get_loc(driver, loc):
+def get_loc(driver, loc, list):
     sleep_wrap(go,3,driver,HOME)
     input_search = WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
     input_search.clear()
