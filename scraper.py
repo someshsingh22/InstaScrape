@@ -27,9 +27,29 @@ def go(driver, link, sleep=3):
 
 def get_loc(driver, loc):
     sleep_wrap(go,3,driver,HOME)
-    input_search = WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
-    sleep_wrap(input_search.send_keys, 1, loc)
-    sleep_wrap(input_search.send_keys, 2, Keys.ENTER)
-    sleep_wrap(input_search.send_keys, 3, Keys.ENTER)
+    input_search = WebDriverWait(driver, 3).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
+    input_search.clear()
+    sleep_wrap(input_search.send_keys, 0.5, loc)
+    sleep_wrap(input_search.send_keys, 4, Keys.ENTER)
+    sleep_wrap(input_search.send_keys, 4, Keys.ENTER)
     print(driver.current_url)
     return driver.current_url
+
+if __name__ == "__main__":
+
+    #If running as a part of a module uncomment the line below
+    #from scraper import *
+    from selenium import webdriver
+    import pandas as pd
+    browser = webdriver.Chrome()
+    sleep_wrap(login, 3, browser, "somesh.22", "someshSINGH@22")
+    links = []
+    csv = pd.read_csv('insta.csv')
+    locations = (csv['Apartment Name']+csv['City']).tolist()
+    for loc in locations:
+        try:
+            links.append(sleep_wrap(get_loc, 0.5, browser, loc))
+        except:
+            links.append("NA")
+    csv['Links']=links
+    csv.to_csv('insta_locs.csv', index=False)
