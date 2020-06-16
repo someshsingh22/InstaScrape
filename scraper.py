@@ -4,7 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import time
+from bs4 import BeautifulSoup as bs
+import time, re
 
 class InstaScraper:
     '''
@@ -49,36 +50,48 @@ class InstaScraper:
         button.click()
         time.sleep(5)
 
-    def go(self, link):
+    def go(self, link, sleep=5):
         '''
         GET LINK
 
         link    : URL you want your browser to go to
         '''
         self.driver.get(link)
-        time.sleep(5)
+        time.sleep(sleep)
 
-    def get_loc(self, loc):
+    def search(self, loc):
         '''
-        LOCATION EXTRACTOR
+        Search Query
 
         loc     : Name of query
         '''
-        # Reach Homepage
-        self.go(self.HOME)
         
-        #Collect search box, clear, enter query, click
-        search_box = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
+        #Collect search box, clear, enter query
+        search_box = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
         search_box.clear()
         search_box.send_keys(loc)
-        time.sleep(5)
-        search_box.send_keys(Keys.ENTER)
-        time.sleep(0.5)
-        search_box.send_keys(Keys.ENTER)
-        time.sleep(5)
+        #time.sleep(2)
 
-        #LOG OUTPUT
-        print(self.driver.current_url)
+    def get_locs(self):
+        '''
+        Returns list of locations from extracted queries
 
-        #RETURN LINK
-        return self.driver.current_url
+        search_parser    
+        '''    
+
+        #RETURN parser
+        parser = bs(self.driver.page_source, 'html.parser')
+        results  = parser.find('div', {"class" : "fuqBx"})
+
+        start = time.time()
+        while results is None and time.time()-start < 15:
+            time.sleep(2)
+            parser = bs(self.driver.page_source, 'html.parser')
+            results  = parser.find('div', {"class" : "fuqBx"})
+
+        locations = results.find_all(href=re.compile("explore/locations"))
+        loc_urls = ['https://www.instagram.com'+loc.attrs['href'] for loc in locations]
+        output = ', '.join(loc_urls)
+        return output
+
+
