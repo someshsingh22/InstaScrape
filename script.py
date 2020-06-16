@@ -26,3 +26,4 @@ for location in locations:
 #Save Results
 scrape_csv['Links']=links
 scrape_csv.to_csv('insta_locs.csv', index=False)
+scrape_bot.end()

@@ -89,4 +89,7 @@ class InstaScraper:
             output == "NOT FOUND"
         return output
 
+    def end(self):
+        self.driver.quit()
+
 
