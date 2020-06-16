@@ -70,7 +70,7 @@ class InstaScraper:
         search_box = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
         search_box.clear()
         search_box.send_keys(loc)
-        #time.sleep(2)
+        time.sleep(3)
 
     def get_locs(self):
         '''
@@ -82,16 +82,11 @@ class InstaScraper:
         #RETURN parser
         parser = bs(self.driver.page_source, 'html.parser')
         results  = parser.find('div', {"class" : "fuqBx"})
-
-        start = time.time()
-        while results is None and time.time()-start < 15:
-            time.sleep(2)
-            parser = bs(self.driver.page_source, 'html.parser')
-            results  = parser.find('div', {"class" : "fuqBx"})
-
         locations = results.find_all(href=re.compile("explore/locations"))
         loc_urls = ['https://www.instagram.com'+loc.attrs['href'] for loc in locations]
         output = ', '.join(loc_urls)
+        if output == '':
+            output == "NOT FOUND"
         return output
 
 

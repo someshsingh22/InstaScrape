@@ -2,13 +2,13 @@ from scraper import InstaScraper
 import pandas as pd
 
 #Change required Path here
-CSV_PATH = "./INSTA.csv"
+CSV_PATH = "./insta.csv"
 
 #Bot init
 scrape_bot = InstaScraper()
 
 #OAuth Authentication
-scrape_bot.login('<YOUR USERNAME>', '<YOUR PASSWORD>')
+scrape_bot.login('<USERNAME>', '<PASSWORD>')
 
 #Read CSV
 scrape_csv = pd.read_csv(CSV_PATH)
@@ -18,7 +18,8 @@ locations = scrape_csv['Apartment Name'] + ' ' + scrape_csv['City']
 links = []
 for location in locations:
     try:
-        links.append(scrape_bot.get_loc(location))
+        scrape_bot.search(location)
+        links.append(scrape_bot.get_locs())
     except:
         links.append("NOT FOUND")
 
