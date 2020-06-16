@@ -49,6 +49,7 @@ class InstaScraper:
         button = self.driver.find_element_by_xpath(NEXT_BUTTON_XPATH)
         button.click()
         time.sleep(5)
+        self.search_box = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
 
     def go(self, link, sleep=5):
         '''
@@ -67,9 +68,8 @@ class InstaScraper:
         '''
         
         #Collect search box, clear, enter query
-        search_box = WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.XPATH, "//input[contains(@class,'XTCLo')]")))
-        search_box.clear()
-        search_box.send_keys(loc)
+        self.search_box.clear()
+        self.search_box.send_keys(loc)
         time.sleep(3)
 
     def get_locs(self):
